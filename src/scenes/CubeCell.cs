@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class CubeCell : Node3D
 {
@@ -7,14 +8,40 @@ public partial class CubeCell : Node3D
 	public delegate void CellSelectedEventHandler(CubeCell cell);
 
 	[Signal]
+	public delegate void PlayerFigureSetEventHandler();
+
+	[Signal]
 	public delegate void CellClearedEventHandler();
 
 	[Export]
-	CollisionObject3D cellCollider;
+	private CollisionObject3D cellCollider;
+
+
+	private Vector3 _relativePosition;
+
+	public Vector3 RelativePosition { 
+		get {return _relativePosition;}
+		set {_relativePosition = value;}
+	}
+
+	private List<CubeCell> ValidNeighbors;
+	private List<CubeCell> ValidOpposites;
+	private List<CubeCell> ValidCells;
+
+	private List<CubeCell> ActiveCells;
+
+	private Node3D PlayerFigureNode;
+
+	public GameCube.PlayerFigure PlayerFigure {get; set;}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		ActiveCells = new List<CubeCell>();
+		ValidNeighbors = new List<CubeCell>();
+		ValidOpposites = new List<CubeCell>();
+		ValidCells = new List<CubeCell>();
+
 		var collider = GetNode<CollisionObject3D>("CellBody");
 		if (collider != null)
 		{
@@ -30,13 +57,70 @@ public partial class CubeCell : Node3D
 
 	private void OnMouseEnter()
 	{
-		GD.Print($"hover on cell {Name}");
 		EmitSignal(SignalName.CellSelected, this);
 	}
 
 	private void OnMouseExit()
 	{
-		GD.Print($"exit cell {Name}");
 		EmitSignal(SignalName.CellCleared);
+	}
+
+	public void AddValidNeighbor(CubeCell neighbor)
+	{
+		ValidNeighbors.Add(neighbor);
+	}
+
+	public void AddValidOpposite(CubeCell opposite)
+	{
+		ValidOpposites.Add(opposite);
+	}
+
+	public void AddActiveCell(CubeCell position){
+		ActiveCells.Add(position);
+	}
+
+	public bool HasPlayerFigure(){
+		return PlayerFigureNode != null;
+	}
+
+	public bool MatchesPlayerFigure(GameCube.PlayerFigure player){
+		return PlayerFigure == player || GameCube.PlayerFigure.OMNI == player;
+	}
+
+	public void SetPlayerFigure(GameCube.PlayerFigure figure)
+	{
+		if (PlayerFigureNode != null)
+		{
+			return;
+		}
+
+		switch (figure)
+		{
+			case GameCube.PlayerFigure.FREE:
+				break;
+			case GameCube.PlayerFigure.OMNI:
+				break;
+			case GameCube.PlayerFigure.CROSS:
+				PlayerFigureNode = GD.Load<PackedScene>("res://src/scenes/cross.tscn").Instantiate() as Node3D;
+				PlayerFigure = figure;
+				AddChild(PlayerFigureNode);
+				break;
+			case GameCube.PlayerFigure.CIRCLE:
+				PlayerFigureNode = GD.Load<PackedScene>("res://src/scenes/circle.tscn").Instantiate() as Node3D;
+				PlayerFigure = figure;
+				AddChild(PlayerFigureNode);
+				break;
+			default:
+				GD.Print("unlucky");
+				break;
+		}
+
+		EmitSignal(SignalName.PlayerFigureSet);
+	}
+
+	private void CombineValidCells()
+	{
+		ValidCells.AddRange(ValidNeighbors);
+		ValidCells.AddRange(ValidOpposites);
 	}
 }

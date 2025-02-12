@@ -1,52 +1,16 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgk7w0yqefihw"]
+[gd_scene load_steps=7 format=3 uid="uid://b4f6ip0r6jsik"]
 
 [ext_resource type="Script" path="res://src/scenes/CubeCell.cs" id="1_j2gx2"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jr7o3"]
-transparency = 1
-albedo_color = Color(1, 1, 1, 0.223529)
-ao_enabled = true
-ao_light_affect = 0.49
+[ext_resource type="Material" uid="uid://ch6kdviugw1i3" path="res://materials/cubeCell.tres" id="2_p0fm3"]
+[ext_resource type="Material" uid="uid://c7qg7glyno83t" path="res://materials/omniCell.tres" id="3_yt7l8"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cndpc"]
-material = SubResource("StandardMaterial3D_jr7o3")
+material = ExtResource("2_p0fm3")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hdm4l"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_quflt"]
-albedo_color = Color(0, 0.541176, 0.541176, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_elnqi"]
-material = SubResource("StandardMaterial3D_quflt")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unih3"]
-albedo_color = Color(0, 0.541176, 0.541176, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6n30f"]
-material = SubResource("StandardMaterial3D_unih3")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bf2a7"]
-albedo_color = Color(0, 0.541176, 0.541176, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_sd4l2"]
-material = SubResource("StandardMaterial3D_bf2a7")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vh0h0"]
-albedo_color = Color(0, 0.541176, 0.541176, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_i4pvj"]
-material = SubResource("StandardMaterial3D_vh0h0")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j3naw"]
-albedo_color = Color(0, 0.541176, 0.541176, 1)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_5l6vg"]
-material = SubResource("StandardMaterial3D_j3naw")
-
-[sub_resource type="SphereMesh" id="SphereMesh_y5lbp"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1c0yr"]
-albedo_color = Color(0.560784, 0.0784314, 0.00784314, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_hcb6d"]
+material = ExtResource("3_yt7l8")
 
 [node name="CubeCell" type="Node3D" node_paths=PackedStringArray("cellCollider")]
 script = ExtResource("1_j2gx2")
@@ -62,37 +26,6 @@ gravity_scale = 0.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CellBody"]
 shape = SubResource("BoxShape3D_hdm4l")
 
-[node name="Cross" type="Node3D" parent="."]
+[node name="Omni" type="MeshInstance3D" parent="."]
 visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Cross"]
-transform = Transform3D(0.141421, 0.25, 0.1, 0, 0.353553, -0.141421, -0.141421, 0.25, 0.1, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_elnqi")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Cross"]
-transform = Transform3D(0.141421, -0.25, 0.1, 0, 0.353553, 0.141421, -0.141421, -0.25, 0.1, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_6n30f")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Cross"]
-transform = Transform3D(0.141421, -0.25, -0.1, 0, 0.353553, -0.141421, 0.141421, 0.25, 0.1, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_sd4l2")
-skeleton = NodePath("../MeshInstance3D2")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Cross"]
-transform = Transform3D(0.141421, 0.25, -0.1, 0, 0.353553, 0.141421, 0.141421, -0.25, 0.1, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_i4pvj")
-skeleton = NodePath("../MeshInstance3D3")
-
-[node name="MeshInstance3D5" type="MeshInstance3D" parent="Cross"]
-transform = Transform3D(0.285, 0, 0, 0, 0.1, 0, 0, 0, 0.285, 0, 0, 0)
-mesh = SubResource("CylinderMesh_5l6vg")
-
-[node name="Circle" type="Node3D" parent="."]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
-visible = false
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Circle"]
-mesh = SubResource("SphereMesh_y5lbp")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_1c0yr")
+mesh = SubResource("BoxMesh_hcb6d")
