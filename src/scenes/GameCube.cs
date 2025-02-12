@@ -13,7 +13,9 @@ public partial class GameCube : Node3D
 	private float _pitch = 0f;
 	private float _yaw = 0f;
 
-	CubeCell selectedCell;
+	private CubeCell selectedCell;
+
+	private bool isCrossTurn = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -72,8 +74,17 @@ public partial class GameCube : Node3D
 			{
 				if (selectedCell != null)
 				{
-					var cell = selectedCell.GetNode<Node3D>("Cross");
+					Node3D cell;
+					if (isCrossTurn) 
+				    {
+						cell = selectedCell.GetNode<Node3D>("Cross");
+					}
+					else
+					{
+						cell = selectedCell.GetNode<Node3D>("Circle");
+					}
 					cell.Visible = true;
+					isCrossTurn = !isCrossTurn;
 				}
 				else
 				{
@@ -81,25 +92,6 @@ public partial class GameCube : Node3D
 				}
 
 			}
-		}
-		if (@event is InputEventMouseMotion motion && Input.IsMouseButtonPressed(MouseButton.Right))
-		{
-			var rotation = new Vector3(-motion.Relative.Y * rotationSpeed, motion.Relative.X * rotationSpeed, 0);
-
-			_pitch = Mathf.Clamp(_pitch + rotation.X, -MaxPitchAngle, MaxPitchAngle);
-			_yaw += rotation.Y;
-
-			_yaw = Mathf.Wrap(_yaw, -Mathf.Pi, Mathf.Pi);
-
-			var transform = Transform;
-			transform.Origin -= _origin;
-
-			transform.Basis = Basis.Identity
-				.Rotated(Vector3.Up, _yaw)
-				.Rotated(Vector3.Right, _pitch);
-
-			transform.Origin += _origin;
-			Transform = transform;
 		}
 	}
 }

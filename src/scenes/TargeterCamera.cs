@@ -37,7 +37,7 @@ public partial class TargeterCamera : Camera3D
     {
         if(@event is InputEventMouseMotion motion && Input.IsMouseButtonPressed(MouseButton.Right)){
 			Yaw -= motion.Relative.X * MouseSensitivity;
-			Pitch = Mathf.Clamp(Pitch - motion.Relative.Y * MouseSensitivity, MinimalPitch, MaximumPitch);
+			Pitch = Mathf.Clamp(Pitch + motion.Relative.Y * MouseSensitivity, MinimalPitch, MaximumPitch);
 			UpdateCameraPosition();
 		}
     }
