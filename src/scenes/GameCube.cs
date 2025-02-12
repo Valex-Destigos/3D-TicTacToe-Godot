@@ -7,7 +7,8 @@ public partial class GameCube : Node3D
 
 	private bool isCrossTurn = false;
 
-	public enum PlayerFigure{
+	public enum PlayerFigure
+	{
 		FREE, OMNI, CROSS, CIRCLE
 	}
 
@@ -30,8 +31,8 @@ public partial class GameCube : Node3D
 			{
 				if (selectedCell != null)
 				{
-					if (isCrossTurn) 
-				    {
+					if (isCrossTurn)
+					{
 						selectedCell.SetPlayerFigure(PlayerFigure.CROSS);
 					}
 					else
@@ -51,50 +52,63 @@ public partial class GameCube : Node3D
 			for (int y = -1; y <= 1; y++)
 			{
 				for (int z = -1; z <= 1; z++)
-                {
-                    Vector3 cubePosition = new Vector3(x, y, z);
-                    var instance = cubeCellScene.Instantiate();
-                    AddChild(instance);
+				{
+					Vector3 cubePosition = new Vector3(x, y, z);
+					var instance = cubeCellScene.Instantiate();
+					AddChild(instance);
 
-                    if (instance is Node3D node)
-                    {
-                        node.GlobalScale(Vector3.One * 0.95f);
-                        node.GlobalPosition = GlobalPosition + cubePosition;
-                    }
-                    InitializeCubeCell(cubePosition, instance);
-                }
-            }
+					if (instance is Node3D node)
+					{
+						node.GlobalScale(Vector3.One * 0.95f);
+						node.GlobalPosition = GlobalPosition + cubePosition;
+					}
+					InitializeCubeCell(cubePosition, instance);
+				}
+			}
 		}
 	}
 
-    private void SetSelectedCell(CubeCell cell)
+	private void SetSelectedCell(CubeCell cell)
 	{
+		if (selectedCell != null)
+		{
+			selectedCell.SelectionIdentifier.Visible = false;
+		}
+
 		selectedCell = cell;
+
+		if (selectedCell.PlayerFigure == PlayerFigure.FREE)
+		{
+			selectedCell.SelectionIdentifier.Visible = true;
+		}
 	}
 
 	private void ClearSelectedCell()
 	{
+		selectedCell.SelectionIdentifier.Visible = false;
 		selectedCell = null;
 	}
 
 	private void SwitchPlayerTurn()
 	{
+		selectedCell.SelectionIdentifier.Visible = false;
 		isCrossTurn = !isCrossTurn;
 	}
 
 	private void InitializeCubeCell(Vector3 vec, Node instance)
-    {
-        if (instance is CubeCell cell)
-        {
-            if (vec.X == 0 && vec.Y == 0 && vec.Z == 0)
-            {
-                cell.GetNode<MeshInstance3D>("MeshInstance3D").Visible = false;
-                cell.GetNode<MeshInstance3D>("Omni").Visible = true;
-            }
-            cell.RelativePosition = vec;
-            cell.CellSelected += SetSelectedCell;
-            cell.CellCleared += ClearSelectedCell;
-            cell.PlayerFigureSet += SwitchPlayerTurn;
-        }
-    }
+	{
+		if (instance is CubeCell cell)
+		{
+			if (vec.X == 0 && vec.Y == 0 && vec.Z == 0)
+			{
+				cell.GetNode<MeshInstance3D>("MeshInstance3D").Visible = false;
+				cell.GetNode<MeshInstance3D>("Omni").Visible = true;
+				cell.SetPlayerFigure(PlayerFigure.OMNI);
+			}
+			cell.RelativePosition = vec;
+			cell.CellSelected += SetSelectedCell;
+			cell.CellCleared += ClearSelectedCell;
+			cell.PlayerFigureSet += SwitchPlayerTurn;
+		}
+	}
 }

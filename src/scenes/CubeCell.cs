@@ -16,12 +16,14 @@ public partial class CubeCell : Node3D
 	[Export]
 	private CollisionObject3D cellCollider;
 
+	public Node3D SelectionIdentifier { get; set; }
 
 	private Vector3 _relativePosition;
 
-	public Vector3 RelativePosition { 
-		get {return _relativePosition;}
-		set {_relativePosition = value;}
+	public Vector3 RelativePosition
+	{
+		get { return _relativePosition; }
+		set { _relativePosition = value; }
 	}
 
 	private List<CubeCell> ValidNeighbors;
@@ -32,7 +34,7 @@ public partial class CubeCell : Node3D
 
 	private Node3D PlayerFigureNode;
 
-	public GameCube.PlayerFigure PlayerFigure {get; set;}
+	public GameCube.PlayerFigure PlayerFigure { get; set; } = GameCube.PlayerFigure.FREE;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -48,6 +50,8 @@ public partial class CubeCell : Node3D
 			collider.MouseEntered += OnMouseEnter;
 			collider.MouseExited += OnMouseExit;
 		}
+
+		SelectionIdentifier = GetNode<Node3D>("SelectionIdentifier");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -75,15 +79,18 @@ public partial class CubeCell : Node3D
 		ValidOpposites.Add(opposite);
 	}
 
-	public void AddActiveCell(CubeCell position){
+	public void AddActiveCell(CubeCell position)
+	{
 		ActiveCells.Add(position);
 	}
 
-	public bool HasPlayerFigure(){
+	public bool HasPlayerFigure()
+	{
 		return PlayerFigureNode != null;
 	}
 
-	public bool MatchesPlayerFigure(GameCube.PlayerFigure player){
+	public bool MatchesPlayerFigure(GameCube.PlayerFigure player)
+	{
 		return PlayerFigure == player || GameCube.PlayerFigure.OMNI == player;
 	}
 
@@ -99,6 +106,7 @@ public partial class CubeCell : Node3D
 			case GameCube.PlayerFigure.FREE:
 				break;
 			case GameCube.PlayerFigure.OMNI:
+				PlayerFigure = figure;
 				break;
 			case GameCube.PlayerFigure.CROSS:
 				PlayerFigureNode = GD.Load<PackedScene>("res://src/scenes/cross.tscn").Instantiate() as Node3D;

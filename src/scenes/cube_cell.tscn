@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4f6ip0r6jsik"]
+[gd_scene load_steps=8 format=3 uid="uid://b4f6ip0r6jsik"]
 
 [ext_resource type="Script" path="res://src/scenes/CubeCell.cs" id="1_j2gx2"]
 [ext_resource type="Material" uid="uid://ch6kdviugw1i3" path="res://materials/cubeCell.tres" id="2_p0fm3"]
 [ext_resource type="Material" uid="uid://c7qg7glyno83t" path="res://materials/omniCell.tres" id="3_yt7l8"]
+[ext_resource type="Material" uid="uid://clfhvfdy3evtx" path="res://materials/selectionFrame.tres" id="4_ryjth"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_cndpc"]
 material = ExtResource("2_p0fm3")
@@ -29,3 +30,26 @@ shape = SubResource("BoxShape3D_hdm4l")
 [node name="Omni" type="MeshInstance3D" parent="."]
 visible = false
 mesh = SubResource("BoxMesh_hcb6d")
+
+[node name="SelectionIdentifier" type="Node3D" parent="."]
+visible = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="SelectionIdentifier"]
+transform = Transform3D(0.99783, 0, 0, 0, 0.99783, 0, 0, 0, 0.99783, 0, 0, 0)
+operation = 2
+material = ExtResource("4_ryjth")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="SelectionIdentifier/CSGBox3D"]
+transform = Transform3D(1.1, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+operation = 2
+material = ExtResource("4_ryjth")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="SelectionIdentifier/CSGBox3D"]
+transform = Transform3D(0.9, 0, 0, 0, 1.1, 0, 0, 0, 0.9, 0, 0, 0)
+operation = 2
+material = ExtResource("4_ryjth")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="SelectionIdentifier/CSGBox3D"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 1.1, 0, 0, 0)
+operation = 2
+material = ExtResource("4_ryjth")
