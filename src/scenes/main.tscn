@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bv18qqh2j852a"]
+[gd_scene load_steps=5 format=3 uid="uid://dc63r1a8iob7y"]
 
 [ext_resource type="Script" path="res://src/scenes/GameCube.cs" id="1_5g3xm"]
 [ext_resource type="Script" path="res://src/scenes/TargeterCamera.cs" id="2_k6o5g"]

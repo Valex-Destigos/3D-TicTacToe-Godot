@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4f6ip0r6jsik"]
+[gd_scene load_steps=8 format=3 uid="uid://bgk7w0yqefihw"]
 
 [ext_resource type="Script" path="res://src/scenes/CubeCell.cs" id="1_j2gx2"]
 [ext_resource type="Material" uid="uid://ch6kdviugw1i3" path="res://materials/cubeCell.tres" id="2_p0fm3"]
