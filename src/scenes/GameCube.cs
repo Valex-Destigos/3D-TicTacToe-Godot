@@ -3,6 +3,16 @@ using System;
 
 public partial class GameCube : Node3D
 {
+	[Export]
+	private Vector3 _origin = Vector3.Zero;
+
+	[Export]
+	public float MaxPitchAngle = Mathf.Pi / 3;
+	public float rotationSpeed = 0.01f;
+
+	private float _pitch = 0f;
+	private float _yaw = 0f;
+
 	CubeCell selectedCell;
 
 	// Called when the node enters the scene tree for the first time.
@@ -70,6 +80,23 @@ public partial class GameCube : Node3D
 				}
 
 			}
+		}
+		if (@event is InputEventMouseMotion motion && Input.IsMouseButtonPressed(MouseButton.Right))
+		{
+			var rotation = new Vector3(-motion.Relative.Y * rotationSpeed, motion.Relative.X * rotationSpeed, 0);
+
+			_pitch = Mathf.Clamp(_pitch + rotation.X, -MaxPitchAngle, MaxPitchAngle);
+			_yaw += rotation.Y;
+
+			var transform = Transform;
+			transform.Origin -= _origin;
+
+			transform.Basis = Basis.Identity
+				.Rotated(Vector3.Up, _yaw)
+				.Rotated(Vector3.Right, _pitch);
+
+			transform.Origin += _origin;
+			Transform = transform;
 		}
 	}
 }
