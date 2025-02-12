@@ -72,7 +72,8 @@ public partial class GameCube : Node3D
 			{
 				if (selectedCell != null)
 				{
-					GD.Print($"click on cell {selectedCell.Name}");
+					var cell = selectedCell.GetNode<Node3D>("Cross");
+					cell.Visible = true;
 				}
 				else
 				{
@@ -87,6 +88,8 @@ public partial class GameCube : Node3D
 
 			_pitch = Mathf.Clamp(_pitch + rotation.X, -MaxPitchAngle, MaxPitchAngle);
 			_yaw += rotation.Y;
+
+			_yaw = Mathf.Wrap(_yaw, -Mathf.Pi, Mathf.Pi);
 
 			var transform = Transform;
 			transform.Origin -= _origin;
